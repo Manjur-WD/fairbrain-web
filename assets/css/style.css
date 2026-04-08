@@ -1,0 +1,111 @@
+@font-face {
+    font-family: 'Agency FB';
+    src: url('../fonts/agency.otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Vartigo';
+    src: url('../fonts/Vartigo.otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.text-agency {
+    font-family: 'Agency FB';
+}
+
+.text-vartigo {
+    font-family: 'Vartigo';
+}
+
+/* Custom styles to complement Tailwind */
+.bg-hero-pattern {
+    background-image:
+        radial-gradient(circle at top right, rgba(249, 134, 22, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at bottom left, rgba(107, 64, 158, 0.08) 0%, transparent 40%);
+    background-color: #fcfcfc;
+}
+
+.portfolio-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.portfolio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.custom-bullet::before {
+    content: '✓';
+    color: #6B409E;
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+.stat-circle {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+}
+
+.stat-circle::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    border-radius: 50%;
+    border: 8px solid #F98616;
+    border-top-color: transparent;
+    /* Create the broken circle effect */
+    transform: rotate(45deg);
+}
+
+/* Swiper Customizations */
+.client-swiper .swiper-wrapper {
+    transition-timing-function: linear !important;
+}
+
+.custom-swiper-bullet {
+    background-color: #F98616 !important;
+    opacity: 0.3;
+    transition: all 0.3s ease-in-out;
+    display: inline-block;
+}
+
+.custom-swiper-bullet.swiper-pagination-bullet-active {
+    opacity: 1;
+    background-color: #6B409E !important;
+    transform: scale(1.2);
+}
+
+/* CSS Marquee for Clients */
+@keyframes scroller {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.animate-scroller {
+    animation: scroller 25s linear infinite;
+    display: flex;
+    white-space: nowrap;
+}
+
+.group:hover .animate-scroller {
+    animation-play-state: paused;
+}
