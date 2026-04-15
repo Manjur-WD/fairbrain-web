@@ -4,18 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - FairBrain</title>
+    <title>Gallery - FairBrain</title>
 
-    <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
 
-    <!-- Tailwind CSS (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -38,34 +35,214 @@
             }
         }
     </script>
-    <!-- GSAP for animations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        .gallery-container {
+            display: flex;
+            align-items: center;
+            min-height: calc(100vh - 80px);
+            /* Adjust based on header */
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        /* Left Side Brand Name */
+        .brand-vertical {
+            writing-mode: vertical-lr;
+            /* Vertical text top to bottom */
+            transform: rotate(180deg);
+            /* Read bottom to top */
+            font-size: clamp(1rem , 5vw , 2.5rem);
+            font-weight: 800;
+            color: #6B409E;
+            opacity: 0.8;
+            letter-spacing: 0.05em;
+            text-align: center;
+            
+        }
+
+        /* Monitor Container */
+        .monitor-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        .screen-content {
+            position: absolute;
+            top: 2.6%;
+            /* Adjust to fit inside monitor bezels */
+            left: 1.9%;
+            right: 2%;
+            bottom: 24%;
+            /* Adjust for the monitor stand/bottom bezel */
+            background: #fff;
+            overflow: hidden;
+            /* UPDATED: Changed from auto to hidden for scaling */
+            border-radius: 2px;
+        }
+
+        @media (max-width: 600px) {
+            .monitor-wrapper {
+                max-width: 320px;
+                margin: 0 auto;
+            }
+
+            .screen-content {
+                top: 3%;
+                left: 4%;
+                right: 6%;
+                bottom: 2%;
+                border-radius: 34px;
+            }
+        }
+
+        /* NEW: Force Iframe to 1440px */
+        #website-preview {
+            width: 100%;
+            transform-origin: top left;
+            border: none;
+        }
+
+        .screen-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .screen-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .screen-content::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        /* Right Sidebar Tabs */
+        .sidebar {
+            width: 120px;
+            background-color: #F8ECCD;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4rem 0;
+            gap: 1.5rem;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.05);
+            margin-right: -10px;
+            /* Optional hide border */
+        }
+
+        .logo-tab {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        /* The white circle containing the logo */
+        .logo-circle {
+            width: 70px;
+            height: 70px;
+            background: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            transition: all 0.3s ease;
+            color: #333;
+            border: 2px solid transparent;
+            word-break: break-word;
+            line-height: 1.1;
+        }
+
+        /* Active State */
+        .logo-tab.active {
+            /* Keep stationary */
+        }
+
+        .logo-tab.active .logo-circle {
+            border-color: #F8ECCD;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 80px;
+            height: 80px;
+            font-size: 1rem;
+            transform: translateX(-40px);
+        }
+
+        .logo-tab .logo-bg-curve {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translate(0, -50%);
+            width: 30px;
+            height: 100px;
+            background: #F8ECCD;
+            border-radius: 30px 0 0 30px;
+            z-index: 1;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            display: block !important;
+        }
+
+        .logo-tab.active .logo-bg-curve {
+            opacity: 1;
+            transform: translate(-100%, -50%);
+        }
+
+        .logo-tab .logo-bg-curve::before,
+        .logo-tab .logo-bg-curve::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            background: transparent;
+        }
+
+        .logo-tab .logo-bg-curve::before {
+            top: -20px;
+            rotate: -15deg;
+            left: 12px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 10px 10px 0 10px #F8ECCD;
+        }
+
+        .logo-tab .logo-bg-curve::after {
+            bottom: -20px;
+            rotate: 15deg;
+            left:12px;
+            border-top-right-radius: 20px;
+            box-shadow: 10px -10px 0 10px #F8ECCD;
+        }
+    </style>
 </head>
 
 <body class="font-sans text-brand-dark antialiased bg-white overflow-x-hidden">
-    <!-- Header -->
     <header class="w-full bg-white shadow-sm sticky top-0 z-50 text-agency">
         <div class="container mx-auto px-4 lg:px-8 py-3 flex items-center justify-between">
-            <!-- Logo -->
             <div class="flex items-center gap-2">
-                <a href="index.html">
-                    <img src="assets/images/logo/Fairbrain Logo PNG.png" width="300" height="150" alt="FairBrain Logo"
-                        class="w-40">
-                </a>
+                <img src="assets/images/logo/Fairbrain Logo PNG.png" width="300" height="150" alt="FairBrain Logo"
+                    class="w-40">
             </div>
 
-            <!-- Navbar -->
             <nav class="hidden md:flex space-x-6 lg:space-x-8 font-medium text-sm lg:text-base">
                 <a href="index.html" class="text-brand-dark hover:text-brand-orange transition-colors">Home</a>
-                <a href="about.html" class="text-brand-orange border-b-2 border-brand-orange transition-colors">About Us</a>
-                <a href="gallery.html" class="text-brand-dark hover:text-brand-orange transition-colors">Web Design</a>
+                <a href="about.html" class="text-brand-dark  border-brand-orange transition-colors">About Us</a>
+                <a href="gallery.html" class="text-brand-orange border-b-2 border-brand-orange transition-colors">Web Design</a>
                 <a href="service.html" class="text-brand-dark hover:text-brand-orange transition-colors">Services</a>
                 <a href="portfolio.html" class="text-brand-dark hover:text-brand-orange transition-colors">Portfolio</a>
                 <a href="contact.html" class="text-brand-dark hover:text-brand-orange transition-colors">Contact Us</a>
             </nav>
 
-            <!-- Login / Mobile Menu -->
             <div class="flex items-center gap-4">
                 <button onclick="window.location.href='login.html'"
                     class="bg-brand-dark hover:bg-black text-white px-5 py-2.5 rounded-md font-semibold text-sm transition-colors flex items-center gap-2 shadow-sm">
@@ -87,7 +264,6 @@
         </div>
     </header>
 
-    <!-- Mobile Menu Overlay -->
     <div id="mobile-menu"
         class="fixed inset-y-0 right-0 z-[100] w-64 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 md:hidden flex flex-col items-center pt-8 border-l border-brand-orange/20">
         <button id="close-mobile-menu" class="absolute top-6 right-6 text-brand-dark hover:text-brand-orange">
@@ -96,11 +272,16 @@
             </svg>
         </button>
         <div class="flex flex-col gap-6 w-full text-center px-4 mt-8">
-            <a href="index.html" class="text-brand-dark hover:text-brand-orange text-lg font-bold border-b pb-2">Home</a>
-            <a href="about.html" class="text-brand-orange text-lg font-bold border-b pb-2">About Us</a>
-            <a href="gallery.html" class="text-brand-dark hover:text-brand-orange text-lg font-bold border-b pb-2">Web Design</a>
-            <a href="service.html" class="text-brand-dark hover:text-brand-orange text-lg font-bold border-b pb-2">Services</a>
-            <a href="portfolio.html" class="text-brand-dark hover:text-brand-orange text-lg font-bold border-b pb-2">Portfolio</a>
+            <a href="index.html"
+                class="text-brand-dark hover:text-brand-orange text-lg font-bold border-b pb-2">Home</a>
+            <a href="about.html" class="text-brand-dark hover:text-brand-orange text-lg font-bold border-b pb-2">About
+                Us</a>
+            <a href="gallery.html"
+                class="text-brand-orange hover:text-brand-orange text-lg font-bold border-b pb-2">Web Design</a>
+            <a href="service.html"
+                class="text-brand-dark hover:text-brand-orange text-lg font-bold border-b pb-2">Services</a>
+            <a href="portfolio.html"
+                class="text-brand-dark hover:text-brand-orange text-lg font-bold border-b pb-2">Portfolio</a>
             <a href="contact.html" class="text-brand-dark hover:text-brand-orange text-lg font-bold">Contact Us</a>
             <button onclick="window.location.href='login.html'"
                 class="bg-gradient-to-r from-brand-orange to-brand-yellow text-white px-6 py-3 rounded-md font-semibold mt-4 shadow-md w-full">Login
@@ -109,82 +290,99 @@
     </div>
 
     <main>
-        <!-- Banner Section -->
-        <section class="bg-[#F0E6FF] py-16 lg:py-24 text-center">
-            <div class="container mx-auto px-4 lg:px-8">
-                <h2 class="text-5xl md:text-7xl font-extrabold text-brand-purple mb-2 text-vartigo drop-shadow-sm leading-tight">About Us</h2>
-                <h3 class="text-xl md:text-2xl text-gray-500 font-medium font-sans">Our Creative Legacy</h3>
+        <section class="gallery-container relative py-10 lg:py-0">
+            
+
+            <div class="hidden lg:flex w-2/12 items-center justify-center z-10 bg-gradient-to-b from-purple-100 to-pink-300 relative  left-[180px] h-auto rounded-[40px] py-10 -mt-40">
+                <div class="brand-vertical text-brand-purple -translate-x-[140%] rotate-180" id="vertical-brand-name">DULU</div>
+            </div>
+
+            <div class="w-full lg:w-8/12 flex items-center justify-center p-4 relative z-10 w-full md:mb-0 mb-[100px]">
+                <div class="monitor-wrapper">
+                    <picture>
+                        <source media="(max-width: 600px)" srcset="assets/images/gallery/mockup-mobile.png">
+                        <img src="assets/images/gallery/monitor.png" alt="Monitor"
+                            class="w-full h-auto drop-shadow-2xl">
+                    </picture>
+
+                    <div class="screen-content">
+                        <iframe id="website-preview" src="https://www.dulu.co.in/"
+                            title="Website Preview"></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hidden lg:flex w-2/12 justify-end relative z-10 items-center">
+                <div class="sidebar">
+                    <div class="logo-tab active" onclick="changeBrand('DULU', 'https://www.dulu.co.in/', this)">
+                        <div class="logo-bg-curve hidden"></div>
+                        <div class="logo-circle text-green-700">DULU</div>
+                    </div>
+                    <div class="logo-tab"
+                        onclick="changeBrand('SISCON TMT', 'https://siscontmt.com/', this)">
+                        <div class="logo-bg-curve hidden"></div>
+                        <div class="logo-circle text-blue-900">SISCON TMT</div>
+                    </div>
+                    <div class="logo-tab"
+                        onclick="changeBrand('KPS', 'https://www.kpskitchenking.in/', this)">
+                        <div class="logo-bg-curve hidden"></div>
+                        <div class="logo-circle text-green-800 text-xs">KPS</div>
+                    </div>
+                    <div class="logo-tab"
+                        onclick="changeBrand('Pipli', 'https://www.piplifoods.com/', this)">
+                        <div class="logo-bg-curve block"></div>
+                        <div class="logo-circle text-yellow-400 bg-[#0b525b]">Pipli</div>
+                    </div>
+                    <div class="logo-tab"
+                        onclick="changeBrand('Eyspace', 'https://eyespace.in/', this)">
+                        <div class="logo-bg-curve hidden"></div>
+                        <div class="logo-circle text-red-600 bg-red-100 text-xs">Eyspace</div>
+                    </div>
+                    <div class="logo-tab"
+                        onclick="changeBrand('Indian Art College', 'https://indianartcollege.com/', this)">
+                        <div class="logo-bg-curve hidden"></div>
+                        <div class="logo-circle text-green-700 text-xs">Indian Art College</div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="lg:hidden w-full flex flex-row overflow-x-auto p-4 gap-4 pb-0 z-10 absolute bottom-0 bg-white shadow-t border-t border-gray-100">
+                <div class="flex-shrink-0 logo-circle text-green-700 w-16 h-16 text-xs cursor-pointer border border-gray-200"
+                    onclick="changeBrand('DULU', 'https://www.dulu.co.in/', null)">
+                    DULU
+                </div>
+                <div class="flex-shrink-0 logo-circle text-blue-900 w-16 h-16 text-xs cursor-pointer border border-gray-200"
+                    onclick="changeBrand('SISCON TMT', 'https://siscontmt.com/', null)">
+                    SISCON TMT
+                </div>
+                <div class="flex-shrink-0 logo-circle text-green-800 w-16 h-16 text-[10px] cursor-pointer border border-gray-200"
+                    onclick="changeBrand('KPS', 'https://www.kpskitchenking.in/', null)">
+                    KPS
+                </div>
+                <div class="flex-shrink-0 logo-circle text-yellow-500 bg-[#0b525b] w-16 h-16 text-xs cursor-pointer border-2 border-[#F8ECCD]"
+                    onclick="changeBrand('Piplifoods', 'https://www.piplifoods.com/', null)">
+                    Piplifoods
+                </div>
+                <div class="flex-shrink-0 logo-circle text-red-600 bg-red-100 w-16 h-16 text-xs cursor-pointer border border-gray-200"
+                    onclick="changeBrand('Eyspace', 'https://eyespace.in/', null)">
+                    Eyspace
+                </div>
+                <div class="flex-shrink-0 logo-circle text-green-700 w-16 h-16 text-[10px] cursor-pointer border border-gray-200"
+                    onclick="changeBrand('Indian Art College', 'https://indianartcollege.com/', null)">
+                    Indian Art College
+                </div>
             </div>
         </section>
 
-        <!-- Content Section -->
-        <section class="py-16 lg:py-24 xl:py-32 relative text-agency" id="about-content">
-            <!-- SVG Scroll Line Background -->
-            <div class="absolute inset-0 z-0 hidden lg:block opacity-60" id="svg-container">
-                <svg viewBox="0 0 1200 1600" width="100%" height="100%" preserveAspectRatio="none" style="position: absolute; top: 0; left: 0; pointer-events: none;">
-                    <defs>
-                        <mask id="line-mask">
-                            <path id="mask-path" d="M 200 100 C 200 450, 1000 300, 1000 800 C 1000 1200, 200 1100, 200 1500 C 200 1700, 1000 1550, 1200 1600" stroke="white" stroke-width="16" fill="none" stroke-linecap="round" />
-                        </mask>
-                    </defs>
-                    <path d="M 200 100 C 200 450, 1000 300, 1000 800 C 1000 1200, 200 1100, 200 1500 C 200 1700, 1000 1550, 1200 1600" stroke="#333" stroke-width="2" stroke-dasharray="10, 12" fill="none" mask="url(#line-mask)" />
-                </svg>
-            </div>
-
-            <div class="container mx-auto px-4 lg:px-8 max-w-7xl relative z-10 flex flex-col gap-24 xl:gap-40">
-                <!-- Row 1 -->
-                <div class="flex flex-col md:flex-row gap-10 lg:gap-20 fade-block">
-                    <div class="w-full md:w-[30%]">
-                        <h3 class="text-3xl md:text-4xl font-extrabold text-brand-purple uppercase leading-none">PASSIONATE CREATIVES SPECIALIZING IN BRANDING & PACKAGE DESIGN</h3>
-                    </div>
-                    <div class="w-full md:w-[70%] space-y-6 text-gray-700 font-medium font-sans text-sm md:text-base leading-relaxed">
-                        <h4 class="text-2xl font-bold text-brand-dark uppercase text-agency">WHO WE ARE</h4>
-                        <p>At Fairbrain, we are more than just an agency - we are a powerhouse of creative thinking, specializing in branding, packaging design, and visual storytelling. With decades of expertise, our team of passionate designers transforms ideas into impactful brand experiences that not only look exceptional but also perform in the market.</p>
-                        <p>We believe packaging is not just design - it's communication. Every pack we create is strategically crafted to highlight product value, attract attention on shelves, and build a strong emotional connection with consumers. Our approach blends creativity with deep market understanding to ensure your brand stands out in a competitive landscape.</p>
-                        <p>At Fairbrain, collaboration is at the heart of everything we do. We work closely with our clients, maintaining transparency, trust, and a smooth workflow to deliver results that exceed expectations.</p>
-                        <p>Our mission is simple - to provide powerful branding solutions that drive growth. From packaging to print, and from branding to social media marketing, we ensure your product not only reaches the market but dominates it.</p>
-                    </div>
-                </div>
-
-                <!-- Row 2 -->
-                <div class="flex flex-col md:flex-row-reverse gap-10 lg:gap-20 fade-block">
-                    <div class="w-full md:w-[30%] text-left md:text-right">
-                        <h3 class="text-3xl md:text-4xl font-extrabold text-brand-purple uppercase leading-none">BRING LIFE TO BRANDS WITH RIGHT STRATEGY & CREATIVITY</h3>
-                    </div>
-                    <div class="w-full md:w-[70%] space-y-6 text-gray-700 font-medium font-sans text-sm md:text-base leading-relaxed">
-                        <h4 class="text-2xl font-bold text-brand-dark uppercase text-agency text-left md:text-right hidden md:block opacity-0">.</h4>
-                        <h4 class="text-2xl font-bold text-brand-dark uppercase text-agency">WHAT WE DO</h4>
-                        <p>At Fairbrain, every great design begins with deep understanding. We invest time to truly know you, your business, and the unique strengths of your products and services. From product details to customer behavior and market competition - we study every aspect to build a strong foundation.</p>
-                        <p>Our process then moves into a collaborative ideation phase, where our creative experts come together to exchange ideas, backed by detailed market research and competitive analysis. This ensures that every concept we develop is not just creative, but strategically sound and market-ready.</p>
-                        <p>Finally, we infuse your brand's core essence, values, and identity into the design. The result is a perfect balance of strategy and creativity - delivering designs that are not only visually compelling but also highly relevant, impactful, and engaging.</p>
-                        <p>At Fairbrain, we don't just design - we craft experiences that connect, communicate, and convert.</p>
-                    </div>
-                </div>
-
-                <!-- Row 3 -->
-                <div class="flex flex-col md:flex-row gap-10 lg:gap-20 fade-block">
-                    <div class="w-full md:w-[30%]">
-                        <h3 class="text-3xl md:text-4xl font-extrabold text-brand-purple uppercase leading-none">WELL EXPERIENCED IN TACKLING & SOLVING YOUR BRANDING PROBLEMS</h3>
-                    </div>
-                    <div class="w-full md:w-[70%] space-y-6 text-gray-700 font-medium font-sans text-sm md:text-base leading-relaxed">
-                        <h4 class="text-2xl font-bold text-brand-dark uppercase text-agency">HISTORY</h4>
-                        <p>For over three decades, Fairbrain has been bringing brands to life with unmatched dedication, creativity, and strategic thinking. From our base in Kolkata, we collaborate with ambitious brands of every scale - from emerging businesses to established national and international companies.</p>
-                        <p>Since our inception, we have built strong, lasting relationships with our clients by deeply understanding their unique challenges, creative needs, and market goals. Our strength lies in adapting, evolving, and delivering solutions that are not just visually appealing but commercially effective.</p>
-                        <p>With a highly skilled team of creative experts, we have successfully redesigned, repositioned, and launched numerous brands across diverse industries. Our years of experience give us a clear understanding of the real challenges businesses face - from growth hurdles to market competition - enabling us to solve complex problems with clarity and confidence.</p>
-                        <p>At Fairbrain, we don't just create brands - we shape their journey, strengthen their identity, and drive them towards sustained growth.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Footer Section (Copied from index.html) -->
-        <footer class="bg-gradient-to-r from-brand-orange via-brand-yellow to-brand-yellow pt-16 pb-8 text-brand-dark text-agency">
+        <footer
+            class="bg-gradient-to-r from-brand-orange via-brand-yellow to-brand-yellow pt-16 pb-8 text-brand-dark text-agency">
             <div class="container mx-auto px-4 lg:px-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-                    <!-- Column 1 -->
                     <div>
                         <div class="flex items-center gap-3 mb-6 text-brand-dark">
-                            <img src="./assets/images/logo/Fairbrain Logo PNG.png" alt="" class="w-auto bg-[#ffffff] rounded-2xl p-2">
+                            <img src="./assets/images/logo/Fairbrain Logo PNG.png" alt=""
+                                class="w-auto bg-[#ffffff] rounded-2xl p-2">
                         </div>
                         <div class="flex items-start gap-3 mb-4">
                             <svg class="w-5 h-5 mt-1 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -215,26 +413,31 @@
                         </div>
                     </div>
 
-                    <!-- Column 2 -->
                     <div>
                         <h3 class="font-extrabold text-lg mb-6 uppercase tracking-wider">QUICK LINKS</h3>
                         <ul class="space-y-3 text-sm">
-                            <li><a href="index.html" class="hover:text-white transition-colors flex items-center gap-2"><span
+                            <li><a href="index.html"
+                                    class="hover:text-white transition-colors flex items-center gap-2"><span
                                         class="w-1.5 h-1.5 bg-brand-dark rounded-full inline-block"></span> Home</a>
                             </li>
-                            <li><a href="about.html" class="hover:text-white transition-colors flex items-center gap-2"><span
+                            <li><a href="about.html"
+                                    class="hover:text-white transition-colors flex items-center gap-2"><span
                                         class="w-1.5 h-1.5 bg-brand-dark rounded-full inline-block"></span> About Us</a>
                             </li>
-                            <li><a href="gallery.html" class="hover:text-white transition-colors flex items-center gap-2"><span
+                            <li><a href="gallery.html"
+                                    class="hover:text-white transition-colors flex items-center gap-2"><span
                                         class="w-1.5 h-1.5 bg-brand-dark rounded-full inline-block"></span> Web Design</a>
                             </li>
-                            <li><a href="service.html" class="hover:text-white transition-colors flex items-center gap-2"><span
+                            <li><a href="service.html"
+                                    class="hover:text-white transition-colors flex items-center gap-2"><span
                                         class="w-1.5 h-1.5 bg-brand-dark rounded-full inline-block"></span> Services</a>
                             </li>
-                            <li><a href="portfolio.html" class="hover:text-white transition-colors flex items-center gap-2"><span
+                            <li><a href="portfolio.html"
+                                    class="hover:text-white transition-colors flex items-center gap-2"><span
                                         class="w-1.5 h-1.5 bg-brand-dark rounded-full inline-block"></span>
                                     Portfolio</a></li>
-                            <li><a href="contact.html" class="hover:text-white transition-colors flex items-center gap-2"><span
+                            <li><a href="contact.html"
+                                    class="hover:text-white transition-colors flex items-center gap-2"><span
                                         class="w-1.5 h-1.5 bg-brand-dark rounded-full inline-block"></span> Contact
                                     Us</a></li>
                             <li><a href="#" class="hover:text-white transition-colors flex items-center gap-2"><span
@@ -243,7 +446,6 @@
                         </ul>
                     </div>
 
-                    <!-- Column 3 -->
                     <div>
                         <h3 class="font-extrabold text-lg mb-6 uppercase tracking-wider">COMMUNITY</h3>
                         <ul class="space-y-3 text-sm">
@@ -262,7 +464,6 @@
                         </ul>
                     </div>
 
-                    <!-- Column 4 -->
                     <div>
                         <h3 class="font-extrabold text-lg mb-6 uppercase tracking-wider">GET IN TOUCH</h3>
                         <ul class="space-y-3 text-sm mb-6">
@@ -276,7 +477,6 @@
                                         class="w-1.5 h-1.5 bg-brand-dark rounded-full inline-block"></span> Twitter</a>
                             </li>
                         </ul>
-                        <!-- Social Icons -->
                         <div class="flex gap-4">
                             <a href="#"
                                 class="w-10 h-10 flex items-center justify-center rounded-full bg-brand-purple text-white hover:bg-white hover:text-brand-dark transition-colors shadow">
@@ -311,49 +511,63 @@
         </footer>
     </main>
 
-    <!-- Custom Scripts for About Page Animation -->
     <script>
-        document.addEventListener("DOMContentLoaded", (event) => {
-            gsap.registerPlugin(ScrollTrigger);
+        function changeBrand(name, url, element) {
+            // Update vertical text
+            const verticalBrand = document.getElementById('vertical-brand-name');
+            if (verticalBrand) {
+                verticalBrand.innerText = name;
 
-            // Setup Fade Blocks
-            gsap.utils.toArray('.fade-block').forEach((block, i) => {
-                gsap.from(block, {
-                    y: 60,
-                    opacity: 0,
-                    duration: 1.2,
-                    ease: "power2.out",
-                    scrollTrigger: {
-                        trigger: block,
-                        start: "top 85%",
-                        toggleActions: "play none none reverse"
-                    }
-                });
-            });
-
-            // SVG Line Draw Animation
-            const maskPath = document.getElementById("mask-path");
-            if (maskPath) {
-                const length = maskPath.getTotalLength();
-                
-                // Keep the dashed styling on the main path, but animate the mask path length
-                gsap.set(maskPath, {
-                    strokeDasharray: length,
-                    strokeDashoffset: length
-                });
-
-                gsap.to(maskPath, {
-                    strokeDashoffset: 0,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: "#about-content",
-                        start: "top 60%",
-                        end: "bottom 80%",
-                        scrub: 1.5,
-                    }
-                });
+                // Add tiny animation
+                verticalBrand.style.opacity = '0';
+                setTimeout(() => {
+                    verticalBrand.style.opacity = '0.8';
+                }, 100);
             }
-        });
+
+            // Update iframe src
+            document.getElementById('website-preview').src = url;
+
+            // Only update active state if element is provided (ignores mobile clicks for side state)
+            if (element) {
+                document.querySelectorAll('.logo-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                    tab.querySelector('.logo-bg-curve').classList.replace('block', 'hidden');
+                });
+
+                element.classList.add('active');
+                element.querySelector('.logo-bg-curve').classList.replace('hidden', 'block');
+            }
+        }
+
+        // NEW: Function to scale the iframe to 1440px
+        function scaleIframe() {
+            const container = document.querySelector('.screen-content');
+            const iframe = document.getElementById('website-preview');
+
+            if (!container || !iframe) return;
+
+            // Check if viewing on a mobile screen (< 600px)
+            const isMobileView = window.innerWidth <= 600;
+            // Target smaller width to trigger mobile responsive layout in the iframe
+            const targetWidth = isMobileView ? 375 : 1440;
+
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+
+            const scaleRatio = containerWidth / targetWidth;
+
+            // Set fixed width and calculate required height before scale
+            iframe.style.width = targetWidth + 'px';
+            iframe.style.height = (containerHeight / scaleRatio) + 'px';
+
+            // Apply scale
+            iframe.style.transform = `scale(${scaleRatio})`;
+        }
+
+        // Call on load and resize
+        window.addEventListener('load', scaleIframe);
+        window.addEventListener('resize', scaleIframe);
     </script>
     <script src="assets/js/main.js"></script>
 </body>
